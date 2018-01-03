@@ -191,9 +191,6 @@ public class Login {
 					rs.close();
 					pst.close();
 					frame.dispose();
-//					connection=RCPdatabaseConnection.dbConnector(getUser(), getPass());
-//					MenuUser mojeMenu = new MenuUser(connection);
-//					mojeMenu.setVisible(true);
 				}
 			}
 				
