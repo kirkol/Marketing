@@ -44,6 +44,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.util.Timer;
 import java.util.TimerTask;
+import javax.swing.JSeparator;
 
 
 public class TableAccOfMachineType extends JFrame {
@@ -52,6 +53,8 @@ public class TableAccOfMachineType extends JFrame {
 	private JTable table;
 	private Timer timer;
 	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
 
 	/**
 	 * Launch the application.
@@ -82,7 +85,7 @@ public class TableAccOfMachineType extends JFrame {
 		setBackground(Color.WHITE);
 		setTitle("Tabela maszyn");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 579, 563);
+		setBounds(100, 100, 579, 640);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -95,14 +98,6 @@ public class TableAccOfMachineType extends JFrame {
 		final SimpleDateFormat doNazwy = new SimpleDateFormat("yyyy.MM.dd");
 		final Calendar date = Calendar.getInstance();
 		Image img = new ImageIcon(this.getClass().getResource("/BackgroundImage.jpg")).getImage();
-		
-		
-		// co jeœli u¿ytkownik jest adminem
-		
-		if (Login.getAdmin()==true)
-		{
-		
-		}
 		
 		JScrollPane scrollPane = new JScrollPane();
 		
@@ -165,6 +160,22 @@ public class TableAccOfMachineType extends JFrame {
 		JLabel lbluwagaCeny = new JLabel("<html>UWAGA 4: Ceny zam\u00F3wie\u0144 w PLN przeliczane s\u0105 na EUR (1EUR = 4,2PLN)</html>");
 		lbluwagaCeny.setVerticalAlignment(SwingConstants.TOP);
 		lbluwagaCeny.setHorizontalAlignment(SwingConstants.LEFT);
+		
+		JLabel lblIlo = new JLabel("Podsumowanie tabeli - Ilo\u015B\u0107 maszyn:");
+		lblIlo.setFont(new Font("Tahoma", Font.BOLD, 12));
+		
+		textField_1 = new JTextField();
+		textField_1.setEditable(false);
+		textField_1.setColumns(10);
+		
+		JLabel lblSumaWartoci = new JLabel("Suma warto\u015Bci:");
+		lblSumaWartoci.setFont(new Font("Tahoma", Font.BOLD, 12));
+		
+		textField_2 = new JTextField();
+		textField_2.setEditable(false);
+		textField_2.setColumns(10);
+		
+		JSeparator separator = new JSeparator();
 //						Image img3 = new ImageIcon(this.getClass().getResource("/PdfIcon_mini.png")).getImage();
 //						WylaczAlarm.setIcon(new ImageIcon(img3));
 		
@@ -174,6 +185,7 @@ public class TableAccOfMachineType extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(separator, GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
 						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
 						.addComponent(lblTypMaszyny, GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
 						.addComponent(lblMojeMenu, GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
@@ -181,6 +193,14 @@ public class TableAccOfMachineType extends JFrame {
 							.addComponent(lblRok, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(lblIlo)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(lblSumaWartoci)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(textField_2, GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE))
 						.addComponent(lbluwagaProgram, GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
 						.addComponent(lblUwaga, GroupLayout.PREFERRED_SIZE, 533, Short.MAX_VALUE)
 						.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
@@ -199,8 +219,16 @@ public class TableAccOfMachineType extends JFrame {
 						.addComponent(lblRok)
 						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 190, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblIlo)
+						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblSumaWartoci)
+						.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(separator, GroupLayout.PREFERRED_SIZE, 2, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(lblUwaga)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(lblNewLabel)
@@ -208,7 +236,7 @@ public class TableAccOfMachineType extends JFrame {
 					.addComponent(lbluwagaProgram)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(lbluwagaCeny)
-					.addGap(19))
+					.addContainerGap(37, Short.MAX_VALUE))
 		);
 		contentPane.setLayout(gl_contentPane);
 		
