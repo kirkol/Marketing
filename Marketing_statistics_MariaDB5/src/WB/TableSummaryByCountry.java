@@ -88,7 +88,7 @@ public class TableSummaryByCountry extends JFrame {
 	public TableSummaryByCountry(final Connection connection) {
 		
 		setBackground(Color.WHITE);
-		setTitle("Podsumowanie lat wg dealera");
+		setTitle("Podsumowanie lat wg kraju");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 579, 563);
 		contentPane = new JPanel();
@@ -312,7 +312,7 @@ public class TableSummaryByCountry extends JFrame {
 				
 					try {
 						
-						String query= "SELECT tabela.KrajKlienta, SUM(iloscWTabeli) AS ilosc, CAST(SUM(SumaCenySprzedazyEURWTabeli) AS DECIMAL(10,2)) AS SumaCenySprzedazyEUR FROM ("+ BasicQuery4NewTable +" GROUP BY klant.LANDCODE " +" UNION ALL " + BasicQuery4OldTable +" GROUP BY klant.LANDCODE "+ ") tabela GROUP BY tabela.KrajKlienta";
+						String query= "SELECT tabela.KrajKlienta, SUM(iloscWTabeli) AS ilosc, CAST(SUM(SumaCenySprzedazyEURWTabeli) AS DECIMAL(10,2)) AS SumaCenySprzedazyEUR FROM ("+ BasicQuery4NewTable +" GROUP BY klant.LANDCODE " +" UNION " + BasicQuery4OldTable +" GROUP BY klant.LANDCODE "+ ") tabela GROUP BY tabela.KrajKlienta";
 						PreparedStatement pst=connection.prepareStatement(query);
 						ResultSet rs=pst.executeQuery();
 						table.setModel(DbUtils.resultSetToTableModel(rs));

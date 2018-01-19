@@ -249,7 +249,7 @@ public class TableSummaryByMonths extends JFrame {
 				//String query= BasicQuery4NewTable +" GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4) "+" UNION ALL " + BasicQuery4OldTable +" GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4)";
 				//String query= "SELECT *, SUM(iloscWTabeli) AS ilosc FROM ("+ BasicQuery4NewTable +" GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4) " +" UNION ALL " + BasicQuery4OldTable +" GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4) "+ ") tabela GROUP BY tabela.rok";
 				
-				String query= "SELECT rok, SUM(iloscWTabeli) AS ilosc, CAST(SUM(SumaCenySprzedazyEURWTabeli) AS DECIMAL(10,2)) AS SumaCenySprzedazyEUR FROM ("+ BasicQuery4NewTable +" GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 7) " +" UNION ALL " + BasicQuery4OldTable +" GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 7) "+ ") tabela GROUP BY tabela.rok";
+				String query= "SELECT rok, SUM(iloscWTabeli) AS ilosc, CAST(SUM(SumaCenySprzedazyEURWTabeli) AS DECIMAL(10,2)) AS SumaCenySprzedazyEUR FROM ("+ BasicQuery4NewTable +" GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 7) " +" UNION " + BasicQuery4OldTable +" GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 7) "+ ") tabela GROUP BY tabela.rok";
 				PreparedStatement pst=connection.prepareStatement(query);
 				ResultSet rs=pst.executeQuery();
 				table.setModel(DbUtils.resultSetToTableModel(rs));

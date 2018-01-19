@@ -167,7 +167,7 @@ public class ChooseMachineType_wartosc_rok extends JFrame {
 								//wszystkie maszyny
 								try {
 									
-									query= "SELECT rok, SUM(iloscWTabeli) AS ilosc, CAST(SUM(SumaCenySprzedazyEURWTabeli) AS DECIMAL(10,2)) AS SumaCenySprzedazyEUR FROM ("+ BasicQuery4NewTable +" GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4) " +" UNION ALL " + BasicQuery4OldTable +" GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4) "+ ") tabela GROUP BY tabela.rok";
+									query= "SELECT rok, SUM(iloscWTabeli) AS ilosc, CAST(SUM(SumaCenySprzedazyEURWTabeli) AS DECIMAL(10,2)) AS SumaCenySprzedazyEUR FROM ("+ BasicQuery4NewTable +" GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4) " +" UNION " + BasicQuery4OldTable +" GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4) "+ ") tabela GROUP BY tabela.rok";
 									
 								} catch (Exception e) {
 									e.printStackTrace();
@@ -190,7 +190,7 @@ public class ChooseMachineType_wartosc_rok extends JFrame {
 												"OR verkoopdetail.artikelcode LIKE 'CONTURHD560%' OR verkoopdetail.artikelcode LIKE 'CONTURHD660%' OR verkoopdetail.artikelcode LIKE 'CONTURHD720%' "+
 												"OR verkoopdetail.artikelcode LIKE 'TURSMN560%' OR verkoopdetail.artikelcode LIKE 'TURSMN630%' OR verkoopdetail.artikelcode LIKE 'TURSMN710%')"+
 												" GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4) "+
-												" UNION ALL  "+
+												" UNION  "+
 												BasicQuery4OldTable +
 												"AND (verkoopdetail_old.artikelcode LIKE 'TURMN560%' OR verkoopdetail_old.artikelcode LIKE 'TURMN630%' OR verkoopdetail_old.artikelcode LIKE 'TURMN710%' OR "+
 												"verkoopdetail_old.artikelcode LIKE 'TURMN720%' OR verkoopdetail_old.artikelcode LIKE 'TURMN660%' OR verkoopdetail_old.artikelcode LIKE 'CONTURH56%' OR "+
@@ -215,7 +215,7 @@ public class ChooseMachineType_wartosc_rok extends JFrame {
 												"verkoopdetail.artikelcode LIKE 'CONTURHD830%' OR verkoopdetail.artikelcode LIKE 'CONTURHD970%' OR verkoopdetail.artikelcode LIKE 'CONTURHD1100%' OR verkoopdetail.artikelcode LIKE 'CONTURHDS830%' OR "+
 												"verkoopdetail.artikelcode LIKE 'CONTURHS83%' OR verkoopdetail.artikelcode LIKE 'TURSMN800%' OR verkoopdetail.artikelcode LIKE 'TURSMN930%' OR verkoopdetail.artikelcode LIKE 'TURSMN1100%') "+
 												" GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4) "+
-												"UNION ALL "+
+												"UNION "+
 												BasicQuery4OldTable +
 												"AND (verkoopdetail_old.artikelcode LIKE 'TURMN800%' OR verkoopdetail_old.artikelcode LIKE 'TURMN930%' OR verkoopdetail_old.artikelcode LIKE 'TURMN1100%' OR verkoopdetail_old.artikelcode LIKE 'CONTURH83%' "+
 												"OR verkoopdetail_old.artikelcode LIKE 'CONTURHD830%' OR verkoopdetail_old.artikelcode LIKE 'CONTURHD970%' OR verkoopdetail_old.artikelcode LIKE 'CONTURHD1100%' OR verkoopdetail_old.artikelcode LIKE 'CONTURHDS830%' "+
@@ -237,7 +237,7 @@ public class ChooseMachineType_wartosc_rok extends JFrame {
 												" AND (verkoopdetail.artikelcode LIKE 'TURMN1150%' OR verkoopdetail.artikelcode LIKE 'TURMN1350%' OR verkoopdetail.artikelcode LIKE 'TURMN1550%' OR verkoopdetail.artikelcode LIKE 'TURSMN1150%' "+
 												"OR verkoopdetail.artikelcode LIKE 'TURSMN1350%' OR verkoopdetail.artikelcode LIKE 'TURSMN1550%') "+
 												" GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4) "+
-												" UNION ALL "+
+												" UNION "+
 												BasicQuery4OldTable +
 												" AND (verkoopdetail_old.artikelcode LIKE 'TURMN1150%' OR verkoopdetail_old.artikelcode LIKE 'TURMN1350%' OR verkoopdetail_old.artikelcode LIKE 'TURMN1550%' OR verkoopdetail_old.artikelcode LIKE 'TURSMN1150%' "+
 												"OR verkoopdetail_old.artikelcode LIKE 'TURSMN1350%' OR verkoopdetail_old.artikelcode LIKE 'TURSMN1550%') "
@@ -257,7 +257,7 @@ public class ChooseMachineType_wartosc_rok extends JFrame {
 												BasicQuery4NewTable +
 												" AND (verkoopdetail.artikelcode LIKE 'TURSC560%' OR verkoopdetail.artikelcode LIKE 'TURSC630%' OR verkoopdetail.artikelcode LIKE 'TURSC710%') "+
 												" GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4) "+
-												" UNION ALL "+
+												" UNION "+
 												BasicQuery4OldTable +
 												" AND (verkoopdetail_old.artikelcode LIKE 'TURSC560%' OR verkoopdetail_old.artikelcode LIKE 'TURSC630%' OR verkoopdetail_old.artikelcode LIKE 'TURSC710%') "
 												+" GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4) "+ ") tabela GROUP BY tabela.rok ;";
@@ -276,7 +276,7 @@ public class ChooseMachineType_wartosc_rok extends JFrame {
 												BasicQuery4NewTable +
 												" AND (verkoopdetail.artikelcode LIKE 'TURSC800%' OR verkoopdetail.artikelcode LIKE 'TURSC930%' OR verkoopdetail.artikelcode LIKE 'TURSC1100%') "+
 												" GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4) "+
-												" UNION ALL "+
+												" UNION "+
 												BasicQuery4OldTable +
 												" AND (verkoopdetail_old.artikelcode LIKE 'TURSC800%' OR verkoopdetail_old.artikelcode LIKE 'TURSC930%' OR verkoopdetail_old.artikelcode LIKE 'TURSC1100%') "
 												+ "GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4) "+ ") tabela GROUP BY tabela.rok ;";
@@ -295,7 +295,7 @@ public class ChooseMachineType_wartosc_rok extends JFrame {
 												BasicQuery4NewTable +
 												" AND (verkoopdetail.artikelcode LIKE 'TURSC1150%' OR verkoopdetail.artikelcode LIKE 'TURSC1350%' OR verkoopdetail.artikelcode LIKE 'TURSC1550%') "+
 												" GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4) "+
-												" UNION ALL "+
+												" UNION "+
 												BasicQuery4OldTable +
 												" AND (verkoopdetail_old.artikelcode LIKE 'TURSC1150%' OR verkoopdetail_old.artikelcode LIKE 'TURSC1350%' OR verkoopdetail_old.artikelcode LIKE 'TURSC1550%') "
 												+"GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4) "+ ") tabela GROUP BY tabela.rok ;";
@@ -314,7 +314,7 @@ public class ChooseMachineType_wartosc_rok extends JFrame {
 												BasicQuery4NewTable +
 												" AND (verkoopdetail.artikelcode LIKE 'FCT%') "+
 												" GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4) "+
-												" UNION ALL "+
+												" UNION "+
 												BasicQuery4OldTable +
 												" AND (verkoopdetail_old.artikelcode LIKE 'FCT%') "
 												+"GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4) "+ ") tabela GROUP BY tabela.rok ;";
@@ -333,7 +333,7 @@ public class ChooseMachineType_wartosc_rok extends JFrame {
 												BasicQuery4NewTable +
 												" AND (verkoopdetail.artikelcode LIKE 'FTM%') "+
 												" GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4) "+
-												" UNION ALL "+
+												" UNION "+
 												BasicQuery4OldTable +
 												" AND (verkoopdetail_old.artikelcode LIKE 'FTM%') "
 												+"GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4) "+ ") tabela GROUP BY tabela.rok ;";
@@ -352,7 +352,7 @@ public class ChooseMachineType_wartosc_rok extends JFrame {
 												BasicQuery4NewTable +
 												" AND (verkoopdetail.artikelcode LIKE 'TUR560%' OR verkoopdetail.artikelcode LIKE 'TUR630%' OR verkoopdetail.artikelcode LIKE 'TUR710%' OR verkoopdetail.artikelcode LIKE 'TUR 630%') "+
 												" GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4) "+
-												" UNION ALL "+
+												" UNION "+
 												BasicQuery4OldTable +
 												" AND (verkoopdetail_old.artikelcode LIKE 'TUR560%' OR verkoopdetail_old.artikelcode LIKE 'TUR630%' OR verkoopdetail_old.artikelcode LIKE 'TUR710%' OR verkoopdetail_old.artikelcode LIKE 'TUR 630%') "
 												+"GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4) "+ ") tabela GROUP BY tabela.rok ;";
@@ -384,7 +384,7 @@ public class ChooseMachineType_wartosc_rok extends JFrame {
 												"OR verkoopdetail.artikelcode LIKE 'FCT%' OR verkoopdetail.artikelcode LIKE 'FTM%' "+
 												"OR verkoopdetail.artikelcode LIKE 'TUR560%' OR verkoopdetail.artikelcode LIKE 'TUR630%' OR verkoopdetail.artikelcode LIKE 'TUR710%' OR verkoopdetail.artikelcode LIKE 'TUR 630%')"+
 												" GROUP BY SUBSTRING(verkoop.LEVERDATUM_BEVESTIGD, 1, 4) "+
-												" UNION ALL  "+
+												" UNION  "+
 												BasicQuery4OldTable +
 												"AND NOT (verkoopdetail_old.artikelcode LIKE 'TURMN560%' OR verkoopdetail_old.artikelcode LIKE 'TURMN630%' OR verkoopdetail_old.artikelcode LIKE 'TURMN710%' OR "+
 												"verkoopdetail_old.artikelcode LIKE 'TURMN720%' OR verkoopdetail_old.artikelcode LIKE 'TURMN660%' OR verkoopdetail_old.artikelcode LIKE 'CONTURH56%' OR "+

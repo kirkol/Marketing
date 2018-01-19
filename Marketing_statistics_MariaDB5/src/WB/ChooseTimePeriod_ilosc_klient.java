@@ -173,7 +173,7 @@ public class ChooseTimePeriod_ilosc_klient extends JFrame {
 									+ "LEFT JOIN klant ON verkoopdetail_old.klantnr = klant.KLANTNR "
 									+ "WHERE artikel_algemeen.MACHINETYPE=12 AND verkoop.LEVERDATUM_BEVESTIGD BETWEEN '"+dataODString+"' AND '"+dataDOString+"' AND klant.naam<>'TOKARKI MAGAZYNOWE' AND verkoop.DUMMYSTRING<>'WZ' AND verkoopdetail_old.BESTELD<>0 "+status;
 							
-							String query="SELECT tabela.NrKlienta, tabela.Klient , SUM(iloscWTabeli) AS ilosc, CAST(SUM(SumaCenySprzedazyEURWTabeli) AS DECIMAL(10,2)) AS SumaCenySprzedazyEUR FROM ("+ BasicQuery4NewTable +" GROUP BY verkoop.KLANTNR " +" UNION ALL " + BasicQuery4OldTable +" GROUP BY verkoop.KLANTNR "+ ") tabela GROUP BY tabela.NrKlienta";;
+							String query="SELECT tabela.NrKlienta, tabela.Klient , SUM(iloscWTabeli) AS ilosc, CAST(SUM(SumaCenySprzedazyEURWTabeli) AS DECIMAL(10,2)) AS SumaCenySprzedazyEUR FROM ("+ BasicQuery4NewTable +" GROUP BY verkoop.KLANTNR " +" UNION " + BasicQuery4OldTable +" GROUP BY verkoop.KLANTNR "+ ") tabela GROUP BY tabela.NrKlienta";;
 							PreparedStatement pst=connection.prepareStatement(query);
 							ResultSet rs=pst.executeQuery();
 							
@@ -182,7 +182,7 @@ public class ChooseTimePeriod_ilosc_klient extends JFrame {
 								klient = rs.getString("Klient");
 								dataset.setValue(ilosc, klient, klient);
 							}
-							JFreeChart chart = ChartFactory.createBarChart("Podsumowanie sprzedazy klienta", "Klient", "Ilosc sprzedanych maszyn", dataset, PlotOrientation.VERTICAL, false, true, true);
+							JFreeChart chart = ChartFactory.createBarChart("Podsumowanie sprzedazy do klienta", "Klient", "Ilosc sprzedanych maszyn", dataset, PlotOrientation.VERTICAL, false, true, true);
 							CategoryPlot catPlot = chart.getCategoryPlot();
 							CategoryAxis axis = chart.getCategoryPlot().getDomainAxis();
 							ValueAxis axis2 = chart.getCategoryPlot().getRangeAxis();

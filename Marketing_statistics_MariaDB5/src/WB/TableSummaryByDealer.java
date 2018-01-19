@@ -292,7 +292,9 @@ public class TableSummaryByDealer extends JFrame {
 			if(dataOD.compareTo(dataDO) > 0){
 				JOptionPane.showMessageDialog(null, "Data OD musi byæ przed dat¹ DO");
 			}else{
-				String BasicQuery4NewTable = "SELECT verkoop.KLANTNR AS NrKlienta, verkoopdetail.KLANTNAAM AS Klient, COUNT(verkoop.KLANTNR) AS iloscWTabeli, "+
+				String BasicQuery4NewTable = "SELECT verkoop.KLANTNR AS NrKlienta, "
+						+ "CASE WHEN (klant.LANDCODE='PL' AND klant.DEALER=0) THEN 'FAT' ELSE SUBSTRING(klant.alfacode, 1, INSTR(klant.alfacode, '   ')) END AS Dealer, "
+						+ "COUNT(verkoop.KLANTNR) AS iloscWTabeli, "+
 						"CASE WHEN verkoop.MUNT='PLN' THEN ROUND(verkoop.VERKOOPPRIJS/4.2, 2) ELSE verkoop.VERKOOPPRIJS END AS CenaSprzedazyEUR, "
 						+"SUM(CASE WHEN verkoop.MUNT='PLN' THEN ROUND(verkoop.VERKOOPPRIJS/4.2, 2) ELSE verkoop.VERKOOPPRIJS END) AS SumaCenySprzedazyEURWTabeli  "+
 						"FROM verkoopdetail "
@@ -301,7 +303,9 @@ public class TableSummaryByDealer extends JFrame {
 						+ "LEFT JOIN klant ON verkoopdetail.klantnr = klant.KLANTNR "
 						+ "WHERE artikel_algemeen.MACHINETYPE=12 AND verkoop.LEVERDATUM_BEVESTIGD BETWEEN '"+dataODString+"' AND '"+dataDOString+"' AND klant.naam<>'TOKARKI MAGAZYNOWE' AND verkoop.DUMMYSTRING<>'WZ' AND verkoopdetail.BESTELD<>0 "+status;
 		
-				String BasicQuery4OldTable = "SELECT verkoop.KLANTNR AS NrKlienta, verkoopdetail_old.KLANTNAAM AS Klient, COUNT(verkoop.KLANTNR) AS iloscWTabeli, "+
+				String BasicQuery4OldTable = "SELECT verkoop.KLANTNR AS NrKlienta, "
+						+ "CASE WHEN (klant.LANDCODE='PL' AND klant.DEALER=0) THEN 'FAT' ELSE SUBSTRING(klant.alfacode, 1, INSTR(klant.alfacode, '   ')) END AS Dealer, "
+						+ "COUNT(verkoop.KLANTNR) AS iloscWTabeli, "+
 						"CASE WHEN verkoop.MUNT='PLN' THEN ROUND(verkoop.VERKOOPPRIJS/4.2, 2) ELSE verkoop.VERKOOPPRIJS END AS CenaSprzedazyEUR, "+
 						"SUM(CASE WHEN verkoop.MUNT='PLN' THEN ROUND(verkoop.VERKOOPPRIJS/4.2, 2) ELSE verkoop.VERKOOPPRIJS END) AS SumaCenySprzedazyEURWTabeli "+
 						"FROM verkoopdetail_old "
@@ -312,7 +316,7 @@ public class TableSummaryByDealer extends JFrame {
 				
 					try {
 						
-						String query= "SELECT tabela.NrKlienta, tabela.Klient , SUM(iloscWTabeli) AS ilosc, CAST(SUM(SumaCenySprzedazyEURWTabeli) AS DECIMAL(10,2)) AS SumaCenySprzedazyEUR FROM ("+ BasicQuery4NewTable +" GROUP BY verkoop.KLANTNR " +" UNION ALL " + BasicQuery4OldTable +" GROUP BY verkoop.KLANTNR "+ ") tabela GROUP BY tabela.NrKlienta";
+						String query= "SELECT tabela.NrKlienta, tabela.Dealer , SUM(iloscWTabeli) AS ilosc, CAST(SUM(SumaCenySprzedazyEURWTabeli) AS DECIMAL(10,2)) AS SumaCenySprzedazyEUR FROM ("+ BasicQuery4NewTable +" GROUP BY verkoop.KLANTNR " +" UNION " + BasicQuery4OldTable +" GROUP BY verkoop.KLANTNR "+ ") tabela GROUP BY tabela.NrKlienta";
 						PreparedStatement pst=connection.prepareStatement(query);
 						ResultSet rs=pst.executeQuery();
 						table.setModel(DbUtils.resultSetToTableModel(rs));

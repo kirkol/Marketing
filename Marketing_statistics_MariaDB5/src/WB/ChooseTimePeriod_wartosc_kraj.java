@@ -171,7 +171,7 @@ public class ChooseTimePeriod_wartosc_kraj extends JFrame {
 									+ "LEFT JOIN klant ON verkoopdetail_old.klantnr = klant.KLANTNR "
 									+ "WHERE artikel_algemeen.MACHINETYPE=12 AND verkoop.LEVERDATUM_BEVESTIGD BETWEEN '"+dataODString+"' AND '"+dataDOString+"' AND klant.naam<>'TOKARKI MAGAZYNOWE' AND verkoop.DUMMYSTRING<>'WZ' AND verkoopdetail_old.BESTELD<>0 "+status;
 							
-							String query="SELECT tabela.KrajKlienta, SUM(iloscWTabeli) AS ilosc, CAST(SUM(SumaCenySprzedazyEURWTabeli) AS DECIMAL(10,2)) AS SumaCenySprzedazyEUR FROM ("+ BasicQuery4NewTable +" GROUP BY klant.LANDCODE " +" UNION ALL " + BasicQuery4OldTable +" GROUP BY klant.LANDCODE "+ ") tabela GROUP BY tabela.KrajKlienta";
+							String query="SELECT tabela.KrajKlienta, SUM(iloscWTabeli) AS ilosc, CAST(SUM(SumaCenySprzedazyEURWTabeli) AS DECIMAL(10,2)) AS SumaCenySprzedazyEUR FROM ("+ BasicQuery4NewTable +" GROUP BY klant.LANDCODE " +" UNION " + BasicQuery4OldTable +" GROUP BY klant.LANDCODE "+ ") tabela GROUP BY tabela.KrajKlienta";
 							PreparedStatement pst=connection.prepareStatement(query);
 							ResultSet rs=pst.executeQuery();
 							
