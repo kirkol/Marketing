@@ -229,7 +229,7 @@ public class TableAccOfMachineType extends JFrame {
 		//SUBSTRING(klant.alfacode, 1, INSTR(klant.alfacode, '   ')) AS Klient
 		
 		String BasicQuery4NewTable = "SELECT verkoopdetail.klantnr AS NrKlienta, verkoopdetail.BESTELLINGNR AS NrZamowienia, "
-				+ "CASE WHEN (klant.LANDCODE='PL' AND klant.DEALER=0) THEN 'FAT' ELSE SUBSTRING(klant.alfacode, 1, INSTR(klant.alfacode, '   ')) END AS Dealer, "
+				+ "CASE WHEN (klant.LANDCODE='PL' AND klant.DEALER=0) THEN 'FAT' WHEN (klant.LANDCODE = 'TR' AND klant.DEALER=0) THEN 'BALI MAKINA' ELSE SUBSTRING(klant.alfacode, 1, INSTR(klant.alfacode, '   ')) END AS Dealer, "
 				+ "verkoopdetail.artikelcode AS TypMaszyny, "+
 				"verkoopdetail.artikelomschrijving AS Opis, verkoop.SERIENUMMER AS NrSeryjny, verkoop.LEVERDATUM_BEVESTIGD AS PotwierdzonaDataDostawy, CASE WHEN verkoop.MUNT='PLN' THEN ROUND(verkoop.VERKOOPPRIJS/4.2, 2) ELSE verkoop.VERKOOPPRIJS END AS CenaSprzedazyEUR, "+
 				"klant.LANDCODE AS KrajKlienta, klant.DEALER AS CzyDealer, verkoop.statuscode AS status FROM verkoopdetail "
@@ -239,7 +239,7 @@ public class TableAccOfMachineType extends JFrame {
 				+ "WHERE artikel_algemeen.MACHINETYPE=12 AND klant.naam<>'TOKARKI MAGAZYNOWE' AND verkoop.DUMMYSTRING<>'WZ' AND verkoopdetail.BESTELD<>0 ";
 
 		String BasicQuery4OldTable = "SELECT verkoopdetail_old.klantnr AS NrKlienta, verkoopdetail_old.BESTELLINGNR AS NrZamowienia, "
-				+ "CASE WHEN (klant.LANDCODE='PL' AND klant.DEALER=0) THEN 'FAT' ELSE SUBSTRING(klant.alfacode, 1, INSTR(klant.alfacode, '   ')) END AS Klient, "
+				+ "CASE WHEN (klant.LANDCODE='PL' AND klant.DEALER=0) THEN 'FAT' WHEN (klant.LANDCODE = 'TR' AND klant.DEALER=0) THEN 'BALI MAKINA' ELSE SUBSTRING(klant.alfacode, 1, INSTR(klant.alfacode, '   ')) END AS Klient, "
 				+ "verkoopdetail_old.artikelcode AS TypMaszyny, "+
 				"verkoopdetail_old.artikelomschrijving AS Opis, verkoop.SERIENUMMER AS NrSeryjny, verkoop.LEVERDATUM_BEVESTIGD AS PotwierdzonaDataDostawy, CASE WHEN verkoop.MUNT='PLN' THEN ROUND(verkoop.VERKOOPPRIJS/4.2, 2) ELSE verkoop.VERKOOPPRIJS END AS CenaSprzedazyEUR,  "+
 				"klant.LANDCODE AS KrajKlienta, klant.DEALER AS CzyDealer, verkoop.statuscode AS status FROM verkoopdetail_old "
