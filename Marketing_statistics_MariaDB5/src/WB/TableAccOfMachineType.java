@@ -53,6 +53,7 @@ public class TableAccOfMachineType extends JFrame {
 	private JTable table;
 	private Timer timer;
 	private JTextField textField;
+	private JTextField textField_1;
 
 	/**
 	 * Launch the application.
@@ -126,7 +127,7 @@ public class TableAccOfMachineType extends JFrame {
 						);
 			}});
 		scrollPane.setViewportView(table);
-		ShowTable(connection, table, typ_maszyny, "");
+		ShowTable(connection, table, typ_maszyny, "", "");
 		
 		JLabel lblUwaga = new JLabel("<html>UWAGA: Program analizuje jedynie maszyny (artyku\u0142y), kt\u00F3re w swoim opisie maj\u0105 ustawiony typ maszyny = 12 (FAT LATHES) w HacoSofcie</html>");
 		lblUwaga.setVerticalAlignment(SwingConstants.TOP);
@@ -150,7 +151,7 @@ public class TableAccOfMachineType extends JFrame {
 		textField.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
 				if (e.getKeyCode()==KeyEvent.VK_ENTER){
-					ShowTable(connection, table, "WSZYSTKIE", textField.getText());
+					ShowTable(connection, table, "WSZYSTKIE", textField.getText(), textField_1.getText());
 				}
 			}
 		});
@@ -164,6 +165,19 @@ public class TableAccOfMachineType extends JFrame {
 		JLabel lbluwagaJeli = new JLabel("<html>UWAGA 5: Je\u015Bli klient jest z Polski i NIE jest ustawiony jako dealer, to program ustawi klient = FAT</html>");
 		lbluwagaJeli.setVerticalAlignment(SwingConstants.TOP);
 		lbluwagaJeli.setHorizontalAlignment(SwingConstants.LEFT);
+		
+		JLabel lblNewLabel_1 = new JLabel("KLIENT:");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 12));
+		
+		textField_1 = new JTextField();
+		textField_1.setColumns(10);
+		textField_1.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				if (e.getKeyCode()==KeyEvent.VK_ENTER){
+					ShowTable(connection, table, "WSZYSTKIE", textField.getText(), textField_1.getText());
+				}
+			}
+		});
 //						Image img3 = new ImageIcon(this.getClass().getResource("/PdfIcon_mini.png")).getImage();
 //						WylaczAlarm.setIcon(new ImageIcon(img3));
 		
@@ -180,7 +194,11 @@ public class TableAccOfMachineType extends JFrame {
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addComponent(lblRok, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addGap(34)
+							.addComponent(lblNewLabel_1)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE))
 						.addComponent(lbluwagaProgram, GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
 						.addComponent(lblUwaga, GroupLayout.PREFERRED_SIZE, 533, Short.MAX_VALUE)
 						.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
@@ -198,7 +216,10 @@ public class TableAccOfMachineType extends JFrame {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addComponent(lblRok)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+							.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblNewLabel_1)
+							.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
 					.addPreferredGap(ComponentPlacement.RELATED)
@@ -219,13 +240,19 @@ public class TableAccOfMachineType extends JFrame {
 		
 		}
 	
-	public void ShowTable(Connection connection, JTable table, String typMaszyny, String rok)
+	public void ShowTable(Connection connection, JTable table, String typMaszyny, String rok, String klientFiltr)
 	{	
 		if(rok.equals("")){
 			rok = "";
 		}else{
 			rok = "AND verkoop.LEVERDATUM_BEVESTIGD LIKE '"+rok+"%'";
 		}
+		if(klientFiltr.equals("")){
+			klientFiltr = "";
+		}else{
+			klientFiltr = "AND klant.ALFACODE LIKE '%"+klientFiltr+"%'";
+		}
+		
 		//SUBSTRING(klant.alfacode, 1, INSTR(klant.alfacode, '   ')) AS Klient
 		
 		String BasicQuery4NewTable = "SELECT verkoopdetail.klantnr AS NrKlienta, verkoopdetail.BESTELLINGNR AS NrZamowienia, "
@@ -250,7 +277,7 @@ public class TableAccOfMachineType extends JFrame {
 		if(typMaszyny == "WSZYSTKIE"){
 			//wszystkie maszyny
 			try {
-				String query= BasicQuery4NewTable + rok + " UNION " + BasicQuery4OldTable + rok;
+				String query= BasicQuery4NewTable + rok + klientFiltr + " UNION " + BasicQuery4OldTable + rok + klientFiltr;
 				PreparedStatement pst=connection.prepareStatement(query);
 				ResultSet rs=pst.executeQuery();
 				table.setModel(DbUtils.resultSetToTableModel(rs));
@@ -271,13 +298,13 @@ public class TableAccOfMachineType extends JFrame {
 			// szuka artikelcode like:
 			// TURMN560%, TURMN630%, TURMN710%, TURMN660%, TURMN720%, CONTURH56%, CONTURH66%, CONTURH72%, CONTURHD560%, CONTURHD660%, CONTURHD720%
 			try {
-				String query=BasicQuery4NewTable + rok +
+				String query=BasicQuery4NewTable + rok + klientFiltr +
 							"AND (verkoopdetail.artikelcode LIKE 'TURMN560%' OR verkoopdetail.artikelcode LIKE 'TURMN630%' OR verkoopdetail.artikelcode LIKE 'TURMN710%' OR verkoopdetail.artikelcode LIKE 'TURMN720%' "+
 							"OR verkoopdetail.artikelcode LIKE 'TURMN660%' OR verkoopdetail.artikelcode LIKE 'CONTURH56%' OR verkoopdetail.artikelcode LIKE 'CONTURH66%' OR verkoopdetail.artikelcode LIKE 'CONTURH72%' "+
 							"OR verkoopdetail.artikelcode LIKE 'CONTURHD560%' OR verkoopdetail.artikelcode LIKE 'CONTURHD660%' OR verkoopdetail.artikelcode LIKE 'CONTURHD720%' "+
 							"OR verkoopdetail.artikelcode LIKE 'TURSMN560%' OR verkoopdetail.artikelcode LIKE 'TURSMN630%' OR verkoopdetail.artikelcode LIKE 'TURSMN710%')"+
 							" UNION  "+
-							BasicQuery4OldTable + rok +
+							BasicQuery4OldTable + rok + klientFiltr +
 							"AND (verkoopdetail_old.artikelcode LIKE 'TURMN560%' OR verkoopdetail_old.artikelcode LIKE 'TURMN630%' OR verkoopdetail_old.artikelcode LIKE 'TURMN710%' OR "+
 							"verkoopdetail_old.artikelcode LIKE 'TURMN720%' OR verkoopdetail_old.artikelcode LIKE 'TURMN660%' OR verkoopdetail_old.artikelcode LIKE 'CONTURH56%' OR "+
 							"verkoopdetail_old.artikelcode LIKE 'CONTURH66%' OR verkoopdetail_old.artikelcode LIKE 'CONTURH72%' OR verkoopdetail_old.artikelcode LIKE 'CONTURHD560%' "+
@@ -299,12 +326,12 @@ public class TableAccOfMachineType extends JFrame {
 			// szuka artikelcode like:
 			// TURMN800%, TURMN930%, TURMN1100%, CONTURH83%, CONTURHD830%, CONTURHD970%. CONTURHD1100, CONTURHDS830%, CONTURHS83%
 			try {
-				String query= BasicQuery4NewTable + rok +
+				String query= BasicQuery4NewTable + rok + klientFiltr +
 							" AND (verkoopdetail.artikelcode LIKE 'TURMN800%' OR verkoopdetail.artikelcode LIKE 'TURMN930%' OR verkoopdetail.artikelcode LIKE 'TURMN1100%' OR verkoopdetail.artikelcode LIKE 'CONTURH83%' OR "+
 							"verkoopdetail.artikelcode LIKE 'CONTURHD830%' OR verkoopdetail.artikelcode LIKE 'CONTURHD970%' OR verkoopdetail.artikelcode LIKE 'CONTURHD1100%' OR verkoopdetail.artikelcode LIKE 'CONTURHDS830%' OR "+
 							"verkoopdetail.artikelcode LIKE 'CONTURHS83%' OR verkoopdetail.artikelcode LIKE 'TURSMN800%' OR verkoopdetail.artikelcode LIKE 'TURSMN930%' OR verkoopdetail.artikelcode LIKE 'TURSMN1100%') "+
 							"UNION "+
-							BasicQuery4OldTable + rok +
+							BasicQuery4OldTable + rok + klientFiltr +
 							"AND (verkoopdetail_old.artikelcode LIKE 'TURMN800%' OR verkoopdetail_old.artikelcode LIKE 'TURMN930%' OR verkoopdetail_old.artikelcode LIKE 'TURMN1100%' OR verkoopdetail_old.artikelcode LIKE 'CONTURH83%' "+
 							"OR verkoopdetail_old.artikelcode LIKE 'CONTURHD830%' OR verkoopdetail_old.artikelcode LIKE 'CONTURHD970%' OR verkoopdetail_old.artikelcode LIKE 'CONTURHD1100%' OR verkoopdetail_old.artikelcode LIKE 'CONTURHDS830%' "+
 							"OR verkoopdetail_old.artikelcode LIKE 'CONTURHS83%' OR verkoopdetail_old.artikelcode LIKE 'TURSMN800%' OR verkoopdetail_old.artikelcode LIKE 'TURSMN930%' OR verkoopdetail_old.artikelcode LIKE 'TURSMN1100%') ;";
@@ -324,11 +351,11 @@ public class TableAccOfMachineType extends JFrame {
 			// szuka artikelcode like:
 			// TURMN1150%, TURMN1350%, TURMN1550%
 			try {
-				String query= BasicQuery4NewTable + rok +
+				String query= BasicQuery4NewTable + rok + klientFiltr +
 							" AND (verkoopdetail.artikelcode LIKE 'TURMN1150%' OR verkoopdetail.artikelcode LIKE 'TURMN1350%' OR verkoopdetail.artikelcode LIKE 'TURMN1550%' OR verkoopdetail.artikelcode LIKE 'TURSMN1150%' "+
 							"OR verkoopdetail.artikelcode LIKE 'TURSMN1350%' OR verkoopdetail.artikelcode LIKE 'TURSMN1550%') "+
 							" UNION "+
-							BasicQuery4OldTable + rok +
+							BasicQuery4OldTable + rok + klientFiltr +
 							" AND (verkoopdetail_old.artikelcode LIKE 'TURMN1150%' OR verkoopdetail_old.artikelcode LIKE 'TURMN1350%' OR verkoopdetail_old.artikelcode LIKE 'TURMN1550%' OR verkoopdetail_old.artikelcode LIKE 'TURSMN1150%' "+
 							"OR verkoopdetail_old.artikelcode LIKE 'TURSMN1350%' OR verkoopdetail_old.artikelcode LIKE 'TURSMN1550%') ";
 				PreparedStatement pst=connection.prepareStatement(query);
@@ -347,10 +374,10 @@ public class TableAccOfMachineType extends JFrame {
 			// szuka artikelcode like:
 			// TURSC560%, TURSC630%, TURSC710%
 			try {
-				String query= BasicQuery4NewTable + rok +
+				String query= BasicQuery4NewTable + rok + klientFiltr +
 							" AND (verkoopdetail.artikelcode LIKE 'TURSC560%' OR verkoopdetail.artikelcode LIKE 'TURSC630%' OR verkoopdetail.artikelcode LIKE 'TURSC710%') "+
 							" UNION "+
-							BasicQuery4OldTable + rok +
+							BasicQuery4OldTable + rok + klientFiltr +
 							" AND (verkoopdetail_old.artikelcode LIKE 'TURSC560%' OR verkoopdetail_old.artikelcode LIKE 'TURSC630%' OR verkoopdetail_old.artikelcode LIKE 'TURSC710%') ";
 				PreparedStatement pst=connection.prepareStatement(query);
 				ResultSet rs=pst.executeQuery();
@@ -368,10 +395,10 @@ public class TableAccOfMachineType extends JFrame {
 			// szuka artikelcode like:
 			// TURSC800%, TURSC930%, TURSC1100%
 			try {
-				String query= BasicQuery4NewTable + rok +
+				String query= BasicQuery4NewTable + rok + klientFiltr +
 							" AND (verkoopdetail.artikelcode LIKE 'TURSC800%' OR verkoopdetail.artikelcode LIKE 'TURSC930%' OR verkoopdetail.artikelcode LIKE 'TURSC1100%') "+
 							" UNION "+
-							BasicQuery4OldTable + rok +
+							BasicQuery4OldTable + rok + klientFiltr +
 							" AND (verkoopdetail_old.artikelcode LIKE 'TURSC800%' OR verkoopdetail_old.artikelcode LIKE 'TURSC930%' OR verkoopdetail_old.artikelcode LIKE 'TURSC1100%') ";
 				PreparedStatement pst=connection.prepareStatement(query);
 				ResultSet rs=pst.executeQuery();
@@ -389,10 +416,10 @@ public class TableAccOfMachineType extends JFrame {
 			// szuka artikelcode like:
 			// TURSC1150%, TURSC1350%, TURSC1550%
 			try {
-				String query= BasicQuery4NewTable + rok +
+				String query= BasicQuery4NewTable + rok + klientFiltr +
 							" AND (verkoopdetail.artikelcode LIKE 'TURSC1150%' OR verkoopdetail.artikelcode LIKE 'TURSC1350%' OR verkoopdetail.artikelcode LIKE 'TURSC1550%') "+
 							" UNION "+
-							BasicQuery4OldTable + rok +
+							BasicQuery4OldTable + rok + klientFiltr +
 							" AND (verkoopdetail_old.artikelcode LIKE 'TURSC1150%' OR verkoopdetail_old.artikelcode LIKE 'TURSC1350%' OR verkoopdetail_old.artikelcode LIKE 'TURSC1550%') ";
 				PreparedStatement pst=connection.prepareStatement(query);
 				ResultSet rs=pst.executeQuery();
@@ -410,10 +437,10 @@ public class TableAccOfMachineType extends JFrame {
 			// szuka artikelcode like:
 			// FCT%
 			try {
-				String query= BasicQuery4NewTable + rok +
+				String query= BasicQuery4NewTable + rok + klientFiltr +
 							" AND (verkoopdetail.artikelcode LIKE 'FCT%') "+
 							" UNION "+
-							BasicQuery4OldTable + rok +
+							BasicQuery4OldTable + rok + klientFiltr +
 							" AND (verkoopdetail_old.artikelcode LIKE 'FCT%') ";
 				PreparedStatement pst=connection.prepareStatement(query);
 				ResultSet rs=pst.executeQuery();
@@ -431,10 +458,10 @@ public class TableAccOfMachineType extends JFrame {
 			// szuka artikelcode like:
 			// FTM%
 			try {
-				String query= BasicQuery4NewTable + rok +
+				String query= BasicQuery4NewTable + rok + klientFiltr +
 							" AND (verkoopdetail.artikelcode LIKE 'FTM%') "+
 							" UNION "+
-							BasicQuery4OldTable + rok +
+							BasicQuery4OldTable + rok + klientFiltr +
 							" AND (verkoopdetail_old.artikelcode LIKE 'FTM%') ";
 				PreparedStatement pst=connection.prepareStatement(query);
 				ResultSet rs=pst.executeQuery();
@@ -452,10 +479,10 @@ public class TableAccOfMachineType extends JFrame {
 			// szuka artikelcode like:
 			// TUR560%, TUR630%, TUR 630%, TUR710%
 			try {
-				String query= BasicQuery4NewTable + rok +
+				String query= BasicQuery4NewTable + rok + klientFiltr +
 							" AND (verkoopdetail.artikelcode LIKE 'TUR560%' OR verkoopdetail.artikelcode LIKE 'TUR630%' OR verkoopdetail.artikelcode LIKE 'TUR710%' OR verkoopdetail.artikelcode LIKE 'TUR 630%') "+
 							" UNION "+
-							BasicQuery4OldTable + rok +
+							BasicQuery4OldTable + rok + klientFiltr +
 							" AND (verkoopdetail_old.artikelcode LIKE 'TUR560%' OR verkoopdetail_old.artikelcode LIKE 'TUR630%' OR verkoopdetail_old.artikelcode LIKE 'TUR710%' OR verkoopdetail_old.artikelcode LIKE 'TUR 630%') ";
 				PreparedStatement pst=connection.prepareStatement(query);
 				ResultSet rs=pst.executeQuery();
@@ -473,7 +500,7 @@ public class TableAccOfMachineType extends JFrame {
 			// szuka artikelcode like:
 			// inne nic te co wyszukiwane wyzej
 			try {
-				String query=BasicQuery4NewTable + rok +
+				String query=BasicQuery4NewTable + rok + klientFiltr +
 							"AND NOT (verkoopdetail.artikelcode LIKE 'TURMN560%' OR verkoopdetail.artikelcode LIKE 'TURMN630%' OR verkoopdetail.artikelcode LIKE 'TURMN710%' OR verkoopdetail.artikelcode LIKE 'TURMN720%' "+
 							"OR verkoopdetail.artikelcode LIKE 'TURMN660%' OR verkoopdetail.artikelcode LIKE 'CONTURH56%' OR verkoopdetail.artikelcode LIKE 'CONTURH66%' OR verkoopdetail.artikelcode LIKE 'CONTURH72%' "+
 							"OR verkoopdetail.artikelcode LIKE 'CONTURHD560%' OR verkoopdetail.artikelcode LIKE 'CONTURHD660%' OR verkoopdetail.artikelcode LIKE 'CONTURHD720%' OR verkoopdetail.artikelcode LIKE 'TURMN800%' "+
@@ -489,7 +516,7 @@ public class TableAccOfMachineType extends JFrame {
 							"OR verkoopdetail.artikelcode LIKE 'FCT%' OR verkoopdetail.artikelcode LIKE 'FTM%' "+
 							"OR verkoopdetail.artikelcode LIKE 'TUR560%' OR verkoopdetail.artikelcode LIKE 'TUR630%' OR verkoopdetail.artikelcode LIKE 'TUR710%' OR verkoopdetail.artikelcode LIKE 'TUR 630%')"+
 							" UNION  "+
-							BasicQuery4OldTable + rok +
+							BasicQuery4OldTable + rok + klientFiltr +
 							"AND NOT (verkoopdetail_old.artikelcode LIKE 'TURMN560%' OR verkoopdetail_old.artikelcode LIKE 'TURMN630%' OR verkoopdetail_old.artikelcode LIKE 'TURMN710%' OR "+
 							"verkoopdetail_old.artikelcode LIKE 'TURMN720%' OR verkoopdetail_old.artikelcode LIKE 'TURMN660%' OR verkoopdetail_old.artikelcode LIKE 'CONTURH56%' OR "+
 							"verkoopdetail_old.artikelcode LIKE 'CONTURH66%' OR verkoopdetail_old.artikelcode LIKE 'CONTURH72%' OR verkoopdetail_old.artikelcode LIKE 'CONTURHD560%' "+
