@@ -5,6 +5,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import org.oxbow.swingbits.table.filter.TableRowFilterSupport;
+
 import net.proteanit.sql.DbUtils;
 
 import javax.swing.JLabel;
@@ -102,6 +104,7 @@ public class TableAccOfMachineType extends JFrame {
 		
 		table = new JTable();
 		table.setBackground(Color.WHITE);
+		TableRowFilterSupport.forTable(table).apply();
 		table.setAutoCreateRowSorter(true);
 		table.addMouseListener(new MouseAdapter() {
 			@Override
@@ -283,6 +286,8 @@ public class TableAccOfMachineType extends JFrame {
 				table.setModel(DbUtils.resultSetToTableModel(rs));
 				pst.close();
 				rs.close();
+				
+				System.out.println(query);
 				
 			} catch (Exception e) {
 				e.printStackTrace();

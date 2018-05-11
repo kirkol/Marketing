@@ -21,5 +21,6 @@
 	<classpathentry kind="lib" path="//dataserver/Logistyka/Tosia/Projekty JAVA/biblioteki/jcommon-1.0.23.jar"/>
 	<classpathentry kind="lib" path="//dataserver/Logistyka/Tosia/Projekty JAVA/biblioteki/jfreechart-1.0.19-experimental.jar"/>
 	<classpathentry kind="lib" path="//dataserver/Logistyka/Tosia/Projekty JAVA/biblioteki/jfreechart-1.0.19.jar"/>
+	<classpathentry exported="true" kind="lib" path="//dataserver/Logistyka/Tosia/Projekty JAVA/biblioteki/swing-bits-1.0.0-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

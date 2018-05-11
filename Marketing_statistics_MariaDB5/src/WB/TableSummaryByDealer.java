@@ -5,6 +5,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import org.oxbow.swingbits.table.filter.TableRowFilterSupport;
+
 import net.proteanit.sql.DbUtils;
 
 import javax.swing.JLabel;
@@ -134,6 +136,7 @@ public class TableSummaryByDealer extends JFrame {
 		table = new JTable();
 		table.setBackground(Color.WHITE);
 		table.setAutoCreateRowSorter(true);
+		TableRowFilterSupport.forTable(table).apply();
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
